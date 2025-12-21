@@ -1,0 +1,21 @@
+# Core Python version (HF uses this if you set runtime)
+# python_version == "3.10"
+
+# Core scientific + ML stack
+numpy>=1.24.0
+torch>=2.0.0
+
+# Hugging Face ecosystem
+transformers>=4.40.0
+datasets>=2.18.0
+
+# Web + UI
+gradio>=4.0.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+
+# Optional but useful
+python-dotenv>=1.0.0
+
+# If you use sentence-transformers later for embeddings:
+# sentence-transformers>=2.6.0
