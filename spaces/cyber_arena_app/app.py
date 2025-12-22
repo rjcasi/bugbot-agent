@@ -1,179 +1,196 @@
-"""
-BugBotAgent — Multi-Panel Hugging Face Space
---------------------------------------------
+import os
+import sys
+from pathlib import Path
+from typing import List
 
-Tabs:
-1. Cyber Arena (LLM cortex switching)
-2. Token Visualizer (tokens, embeddings, attention, spikes, fuzz)
-3. Robotics Arena (XY movement visualization)
-"""
-
-import json
-import numpy as np
 import gradio as gr
+import numpy as np
 
-# Organs
-from bugbot_agent import BugBotAgent
-from symbolic_attention.tensor import SymbolicAttentionTensor
-from spiking_stdp.core import STDPSpikingLayer
-from cyber_arena.fuzz_engine import CyberFuzzEngine
-from robotics.telemetry import RoboticsEmbodiment
-from llm_adapter import create_llm_adapter
+# --- Ensure project root is on sys.path ---
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
 
-
-# ---------------------------------------------------------
-# Shared organs for Token Visualizer + Robotics Arena
-# ---------------------------------------------------------
-
-attention = SymbolicAttentionTensor(dim=32)
-spikes = STDPSpikingLayer(dim=32)
-cyber = CyberFuzzEngine()
-robotics = RoboticsEmbodiment()
+from src.utils.shared_state import shared_state
+from src.utils.tensor_heatmap import generate_heatmap_png
+from src.utils.spike_raster import generate_raster_png
+from src.utils.embedding_projector import (
+    project_embeddings_pca,
+    make_3d_scatter,
+)
+from src.utils.fuzz_patterns import generate_and_record_fuzz
 
 
-def np_to_list(x):
-    return x.tolist() if isinstance(x, np.ndarray) else x
+# ----- Simple token/embedding mock -----
+def mock_tokenize(text: str) -> List[str]:
+    return text.strip().split()
 
 
-# ---------------------------------------------------------
-# Cyber Arena Agent Builder
-# ---------------------------------------------------------
+def mock_embed(tokens: List[str]) -> np.ndarray:
+    rng = np.random.default_rng(len(tokens))
+    return rng.normal(size=(len(tokens), 32))
 
-def build_agent(backend: str):
-    dummy_client = object()
 
-    if backend == "transformers":
-        llm = create_llm_adapter("transformers", model_name="gpt2")
-    elif backend == "chatgpt":
-        llm = create_llm_adapter("chatgpt", client=dummy_client)
-    elif backend == "grok":
-        llm = create_llm_adapter("grok", client=dummy_client)
-    else:
-        llm = None
+# ----- Cyber arena panel -----
+def cyber_arena_step(prompt: str) -> str:
+    if not prompt.strip():
+        return "Provide a prompt to stimulate the arena."
+    tokens = mock_tokenize(prompt)
+    embedding = mock_embed(tokens)
+    shared_state.add_embedding(tokens, embedding)
+    return f"Arena received {len(tokens)} tokens and registered an embedding."
 
-    return BugBotAgent(
-        attention_module=SymbolicAttentionTensor(dim=32),
-        spiking_module=STDPSpikingLayer(dim=32),
-        cyber_defense_module=CyberFuzzEngine(),
-        robotics_module=RoboticsEmbodiment(),
-        llm_module=llm,
+
+# ----- Tensor heatmap panel -----
+def tensor_heatmap_panel(rows: int, cols: int, cmap: str) -> tuple[bytes, str]:
+    img = generate_heatmap_png(rows=rows, cols=cols, cmap=cmap)
+    summary = f"Generated {rows}x{cols} tensor heatmap using cmap='{cmap}'."
+    return img, summary
+
+
+# ----- Spike raster panel -----
+def spike_raster_panel(
+    neurons: int,
+    timesteps: int,
+    firing_prob: float,
+) -> tuple[bytes, str]:
+    img = generate_raster_png(
+        neurons=neurons,
+        timesteps=timesteps,
+        firing_prob=firing_prob,
+    )
+    summary = (
+        f"Spike raster with {neurons} neurons, {timesteps} timesteps, "
+        f"firing_prob={firing_prob:.2f}."
+    )
+    return img, summary
+
+
+# ----- Embedding projector panel -----
+def embedding_projector_panel() -> tuple:
+    last = shared_state.get_last_embedding()
+    if last is None:
+        return None, "No embeddings yet – send a prompt in Cyber Arena first."
+    proj = project_embeddings_pca(last, n_components=3)
+    fig = make_3d_scatter(
+        proj,
+        labels=[f"t{i}" for i in range(proj.shape[0])],
+        title="Last embedding (PCA)",
+    )
+    return fig, "Projected last embedding using PCA into 3D space."
+
+
+# ----- Fuzz generator panel -----
+def fuzz_panel(n: int):
+    events = generate_and_record_fuzz(n)
+    text_lines = [f"[{i}] score={e['score']:.2f} :: {e['pattern']}" for i, e in enumerate(events)]
+    return "\n".join(text_lines)
+
+
+# ----- Robotics panel (placeholder) -----
+def robotics_step(command: str) -> str:
+    if not command.strip():
+        return "Send a movement or task command to see a simulated response."
+    return f"Robotics module received command: '{command}'. (Simulation placeholder.)"
+
+
+# ----- Model card loader -----
+MODEL_CARD_PATH = ROOT / "model_card.md"
+
+
+def load_model_card() -> str:
+    if MODEL_CARD_PATH.exists():
+        return MODEL_CARD_PATH.read_text(encoding="utf-8")
+    return "# Model Card\n\nNo model_card.md found at project root."
+
+
+# ----- Build Gradio UI -----
+with gr.Blocks(title="BugBotAgent Cockpit") as demo:
+    gr.Markdown(
+        "# BugBotAgent Cockpit\n"
+        "A unified organism visualizing **perception, spikes, fuzz, and embodiment**."
     )
 
+    with gr.Tab("Cyber Arena"):
+        arena_in = gr.Textbox(label="Prompt", lines=3)
+        arena_out = gr.Textbox(label="Arena Response", lines=2)
+        arena_btn = gr.Button("Send to Arena")
 
-def cyber_arena_run(input_text, backend):
-    agent = build_agent(backend)
-    return agent.step(input_text)
+        arena_btn.click(
+            cyber_arena_step,
+            inputs=arena_in,
+            outputs=arena_out,
+        )
 
-
-# ---------------------------------------------------------
-# Token Visualizer
-# ---------------------------------------------------------
-
-def visualize_tokens(input_text: str):
-    encoded = attention.encode(input_text)
-    tokens = encoded.get("tokens", [])
-    vector = np_to_list(encoded.get("vector", []))
-    attn = np_to_list(encoded.get("attention", []))
-
-    spike_state = spikes.update(encoded)
-    spike_vec = np_to_list(spike_state.get("spikes", []))
-    weights = np_to_list(spike_state.get("weights", []))
-    t = spike_state.get("time", 0)
-
-    fuzz_state = cyber.evaluate(encoded)
-
-    return (
-        json.dumps(tokens, indent=2, ensure_ascii=False),
-        json.dumps(vector, indent=2),
-        json.dumps(attn, indent=2),
-        json.dumps(spike_vec, indent=2),
-        json.dumps(fuzz_state, indent=2),
-        t,
-    )
-
-
-# ---------------------------------------------------------
-# Robotics Arena
-# ---------------------------------------------------------
-
-def robotics_step(input_text: str):
-    encoded = attention.encode(input_text)
-    state = robotics.act(encoded)
-    return json.dumps(state, indent=2), state["robot_state"]["x"], state["robot_state"]["y"]
-
-
-# ---------------------------------------------------------
-# Gradio UI (Tabbed)
-# ---------------------------------------------------------
-
-with gr.Blocks() as demo:
-    gr.Markdown("# 🐞 BugBotAgent — Multi-Panel Organism Cockpit")
-
-    with gr.Tabs():
-
-        # -------------------------
-        # Cyber Arena
-        # -------------------------
-        with gr.Tab("Cyber Arena"):
-            gr.Markdown("### LLM Cortex Switching + Full Agent Cycle")
-
-            input_box = gr.Textbox(label="Input or fuzz pattern")
-            backend = gr.Radio(
-                ["transformers", "chatgpt", "grok"],
-                value="transformers",
-                label="LLM Cortex Organ",
+    with gr.Tab("Tensor Heatmap"):
+        with gr.Row():
+            rows = gr.Slider(4, 64, value=16, step=1, label="Rows")
+            cols = gr.Slider(4, 64, value=16, step=1, label="Cols")
+            cmap = gr.Dropdown(
+                ["viridis", "magma", "plasma", "inferno"],
+                value="viridis",
+                label="Colormap",
             )
-            run_btn = gr.Button("Run Cycle")
+        heatmap_img = gr.Image(label="Heatmap", type="numpy")
+        heatmap_txt = gr.Textbox(label="Summary", lines=2)
+        heatmap_btn = gr.Button("Generate Heatmap")
 
-            output_json = gr.JSON(label="Agent State")
+        heatmap_btn.click(
+            tensor_heatmap_panel,
+            inputs=[rows, cols, cmap],
+            outputs=[heatmap_img, heatmap_txt],
+        )
 
-            run_btn.click(
-                fn=cyber_arena_run,
-                inputs=[input_box, backend],
-                outputs=[output_json],
-            )
+    with gr.Tab("Spike Raster"):
+        with gr.Row():
+            neurons = gr.Slider(8, 128, value=32, step=1, label="Neurons")
+            timesteps = gr.Slider(20, 300, value=100, step=5, label="Timesteps")
+            firing_prob = gr.Slider(0.01, 0.3, value=0.05, step=0.01, label="Firing Prob")
+        raster_img = gr.Image(label="Spike Raster", type="numpy")
+        raster_txt = gr.Textbox(label="Summary", lines=2)
+        raster_btn = gr.Button("Generate Raster")
 
-        # -------------------------
-        # Token Visualizer
-        # -------------------------
-        with gr.Tab("Token Visualizer"):
-            gr.Markdown("### Tokens → Embeddings → Attention → Spikes → Fuzz")
+        raster_btn.click(
+            spike_raster_panel,
+            inputs=[neurons, timesteps, firing_prob],
+            outputs=[raster_img, raster_txt],
+        )
 
-            tv_input = gr.Textbox(label="Input text")
-            tv_btn = gr.Button("Visualize")
+    with gr.Tab("Embedding Projector 3D"):
+        proj_fig = gr.Plot(label="Embedding 3D")
+        proj_txt = gr.Textbox(label="Status", lines=2)
+        proj_btn = gr.Button("Project Last Embedding")
 
-            tokens_out = gr.Code(label="Tokens")
-            embed_out = gr.Code(label="Embedding Vector")
-            attn_out = gr.Code(label="Attention Weights")
-            spikes_out = gr.Code(label="STDP Spikes")
-            fuzz_out = gr.Code(label="Fuzz Detection")
-            t_out = gr.Number(label="STDP Time Step", precision=0)
+        proj_btn.click(
+            embedding_projector_panel,
+            inputs=None,
+            outputs=[proj_fig, proj_txt],
+        )
 
-            tv_btn.click(
-                fn=visualize_tokens,
-                inputs=[tv_input],
-                outputs=[tokens_out, embed_out, attn_out, spikes_out, fuzz_out, t_out],
-            )
+    with gr.Tab("Fuzz Generator"):
+        fuzz_n = gr.Slider(1, 20, value=5, step=1, label="Number of Patterns")
+        fuzz_out = gr.Textbox(label="Generated Fuzz Patterns", lines=10)
+        fuzz_btn = gr.Button("Generate Fuzz")
 
-        # -------------------------
-        # Robotics Arena
-        # -------------------------
-        with gr.Tab("Robotics Arena"):
-            gr.Markdown("### Symbolic → Motor Embodiment")
+        fuzz_btn.click(
+            fuzz_panel,
+            inputs=fuzz_n,
+            outputs=fuzz_out,
+        )
 
-            rb_input = gr.Textbox(label="Movement commands (left/right/up/down)")
-            rb_btn = gr.Button("Move")
+    with gr.Tab("Robotics Arena"):
+        robot_cmd = gr.Textbox(label="Command", lines=2)
+        robot_out = gr.Textbox(label="Simulation", lines=3)
+        robot_btn = gr.Button("Send Command")
 
-            rb_json = gr.Code(label="Robotics State")
-            rb_x = gr.Number(label="X Position")
-            rb_y = gr.Number(label="Y Position")
+        robot_btn.click(
+            robotics_step,
+            inputs=robot_cmd,
+            outputs=robot_out,
+        )
 
-            rb_btn.click(
-                fn=robotics_step,
-                inputs=[rb_input],
-                outputs=[rb_json, rb_x, rb_y],
-            )
-
+    with gr.Tab("Model Card"):
+        model_card_md = gr.Markdown(load_model_card())
 
 if __name__ == "__main__":
     demo.launch()
