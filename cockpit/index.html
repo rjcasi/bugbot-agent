@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BugBot-Agent Cockpit</title>
+    <link rel="stylesheet" href="cockpit.css">
+</head>
+<body>
+
+<div id="sidebar">
+    <h2>BugBot-Agent</h2>
+    <ul>
+        <li onclick="loadPanel('/cyber')">Cyber Arena</li>
+        <li onclick="loadPanel('/heatmap')">Heatmap</li>
+        <li onclick="loadPanel('/raster')">Spike Raster</li>
+        <li onclick="loadPanel('/projector')">Embedding Projector</li>
+        <li onclick="loadPanel('/fuzz')">Fuzz Generator</li>
+        <li onclick="loadPanel('/tokens')">Token Visualizer</li>
+        <li onclick="loadPanel('/modelcard')">Model Card</li>
+        <li onclick="loadPanel('/robotics')">Robotics Arena</li>
+    </ul>
+</div>
+
+<div id="main">
+    <iframe id="panelFrame" src=""></iframe>
+</div>
+
+<script src="cockpit.js"></script>
+</body>
+</html>
