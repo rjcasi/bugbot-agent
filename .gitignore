@@ -1,21 +1,43 @@
-# Python
+# -------------------------
+# Python virtual environments
+# -------------------------
+venv/
+.venv/
+.env/
+
+# -------------------------
+# Python bytecode
+# -------------------------
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Virtual environment
-venv/
+# -------------------------
+# OS files
+# -------------------------
+.DS_Store
+Thumbs.db
 
-# Hugging Face cache
-~/.cache/huggingface/
+# -------------------------
+# VS Code
+# -------------------------
+.vscode/
 
+# -------------------------
+# Hugging Face cache (repo-local)
+# -------------------------
+cache/
+.cache/
+huggingface/
+
+# -------------------------
 # Model weights
+# -------------------------
 *.bin
 *.pt
 
-# VS Code
-.vscode/
-
+# -------------------------
 # Logs
-*.log:
+# -------------------------
+*.log
