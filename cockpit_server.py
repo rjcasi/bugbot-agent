@@ -1,31 +1,63 @@
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.wsgi import WSGIMiddleware
-from gradio.routes import mount_gradio_app
-
-# Import your organs
-from spaces.cyber_arena_app.app import demo as cyber_app
-from spaces.heatmap_app.app import demo as heatmap_app
-from spaces.raster_app.app import demo as raster_app
-from spaces.fuzz_generator_app.app import demo as fuzz_app
-from spaces.token_visualizer_app.app import demo as token_app
-from spaces.model_card_app.app import demo as modelcard_app
-
-# Flask robotics organ (if you have one)
-from robotics_arena_app import flask_app
+import uvicorn
+import os
 
 app = FastAPI()
 
-# Mount cockpit static files
-app.mount("/", StaticFiles(directory="cockpit", html=True), name="cockpit")
+# Mount cockpit folder for HTML panels
+app.mount("/cockpit", StaticFiles(directory="cockpit"), name="cockpit")
 
-# Mount Gradio organs
-mount_gradio_app(app, cyber_app, path="/cyber")
-mount_gradio_app(app, heatmap_app, path="/heatmap")
-mount_gradio_app(app, raster_app, path="/raster")
-mount_gradio_app(app, fuzz_app, path="/fuzz")
-mount_gradio_app(app, token_app, path="/tokens")
-mount_gradio_app(app, modelcard_app, path="/modelcard")
+# -----------------------------
+#   ROOT PANEL (index.html)
+# -----------------------------
+@app.get("/")
+def root():
+    return FileResponse("cockpit/index.html")
 
-# Mount Flask organ
-app.mount("/robotics", WSGIMiddleware(flask_app))
+
+# -----------------------------
+#   EXISTING PANELS
+# -----------------------------
+@app.get("/robotics")
+def robotics():
+    return FileResponse("cockpit/robotic_arena.html")
+
+
+# -----------------------------
+#   NEW ORGANS (4 panels)
+# -----------------------------
+@app.get("/causal_set")
+def causal_set():
+    return FileResponse("cockpit/causal_set.html")
+
+
+@app.get("/embeddings")
+def embeddings():
+    return FileResponse("cockpit/embeddings.html")
+
+
+@app.get("/fourier_surface")
+def fourier_surface():
+    return FileResponse("cockpit/fourier_surface.html")
+
+
+@app.get("/robotics_panel")
+def robotics_panel():
+    return FileResponse("cockpit/robotics_panel.html")
+
+
+# -----------------------------
+#   PHYSICS ARENA (Unified Organ)
+# -----------------------------
+@app.get("/physics_arena")
+def physics_arena():
+    return FileResponse("cockpit/physics_arena.html")
+
+
+# -----------------------------
+#   SERVER LAUNCHER
+# -----------------------------
+if __name__ == "__main__":
+    uvicorn.run("cockpit_server:app", host="127.0.0.1", port=8000, reload=True)

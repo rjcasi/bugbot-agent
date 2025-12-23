@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Embedding Space Panel</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body { margin: 0; background: #050510; color: #e0e0ff; }
+        #plot { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+<div id="plot"></div>
+
+<script>
+    // Generate random clusters
+    function generateClusters(numClusters = 3, pointsPerCluster = 50) {
+        const clusters = [];
+        const centers = [];
+
+        for (let i = 0; i < numClusters; i++) {
+            const cx = Math.random() * 8 - 4;
+            const cy = Math.random() * 8 - 4;
+            centers.push({x: cx, y: cy});
+
+            for (let j = 0; j < pointsPerCluster; j++) {
+                clusters.push({
+                    x: cx + (Math.random() - 0.5) * 1.2,
+                    y: cy + (Math.random() - 0.5) * 1.2,
+                    cluster: i
+                });
+            }
+        }
+        return {clusters, centers};
+    }
+
+    // Generate a trajectory through cluster centers
+    function generateTrajectory(centers) {
+        const path = [];
+        for (let i = 0; i < centers.length - 1; i++) {
+            const A = centers[i];
+            const B = centers[i + 1];
+            for (let t = 0; t <= 1; t += 0.05) {
+                path.push({
+                    x: A.x * (1 - t) + B.x * t,
+                    y: A.y * (1 - t) + B.y * t
+                });
+            }
+        }
+        return path;
+    }
+
+    const {clusters, centers} = generateClusters();
+    const trajectory = generateTrajectory(centers);
+
+    // Scatter plot for embeddings
+    const clusterTrace = {
+        x: clusters.map(p => p.x),
+        y: clusters.map(p => p.y),
+        mode: "markers",
+        marker: {
+            size: 8,
+            color: clusters.map(p => p.cluster),
+            colorscale: "Viridis"
+        },
+        type: "scatter"
+    };
+
+    // Cluster centers
+    const centerTrace = {
+        x: centers.map(c => c.x),
+        y: centers.map(c => c.y),
+        mode: "markers+text",
+        text: centers.map((c, i) => "C" + i),
+        textposition: "top center",
+        marker: {size: 14, color: "white", symbol: "x"},
+        type: "scatter"
+    };
+
+    // Trajectory
+    const trajTrace = {
+        x: trajectory.map(p => p.x),
+        y: trajectory.map(p => p.y),
+        mode: "lines",
+        line: {color: "red", width: 3},
+        type: "scatter"
+    };
+
+    const layout = {
+        paper_bgcolor: "#050510",
+        plot_bgcolor: "#050510",
+        xaxis: {color: "#ccccff"},
+        yaxis: {color: "#ccccff"},
+        title: {
+            text: "Embedding Space — Clusters + Trajectory",
+            font: {color: "#e0e0ff"}
+        },
+        margin: {l: 40, r: 20, t: 40, b: 40}
+    };
+
+    Plotly.newPlot("plot", [clusterTrace, centerTrace, trajTrace], layout);
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Causal Set Panel</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body { margin: 0; background: #050510; color: #e0e0ff; }
+        #plot { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+<div id="plot"></div>
+
+<script>
+    const nodes = [
+        {id: 1, x: 0, y: 3},
+        {id: 2, x: 2, y: 3},
+        {id: 3, x: -1, y: 2},
+        {id: 4, x: 1, y: 2},
+        {id: 5, x: 3, y: 2},
+        {id: 6, x: 0, y: 1},
+        {id: 7, x: 2, y: 1},
+        {id: 8, x: 1, y: 0}
+    ];
+
+    const edges = [
+        [1,3], [1,4],
+        [2,4], [2,5],
+        [3,6],
+        [4,6], [4,7],
+        [5,7],
+        [6,8],
+        [7,8]
+    ];
+
+    const edgeTraces = edges.map(([a,b]) => {
+        const A = nodes.find(n => n.id === a);
+        const B = nodes.find(n => n.id === b);
+        return {
+            x: [A.x, B.x],
+            y: [A.y, B.y],
+            mode: "lines",
+            line: {color: "#ffaa44", width: 2},
+            hoverinfo: "none",
+            showlegend: false
+        };
+    });
+
+    const nodeTrace = {
+        x: nodes.map(n => n.x),
+        y: nodes.map(n => n.y),
+        text: nodes.map(n => "Event " + n.id),
+        mode: "markers+text",
+        textposition: "bottom center",
+        marker: {size: 18, color: "#66ccff"},
+        textfont: {color: "#ffffff"},
+        hoverinfo: "text"
+    };
+
+    const layout = {
+        paper_bgcolor: "#050510",
+        plot_bgcolor: "#050510",
+        xaxis: {visible: false},
+        yaxis: {visible: false},
+        margin: {l: 0, r: 0, t: 20, b: 0},
+        title: {
+            text: "Causal Set — Events and Arrows",
+            font: {color: "#e0e0ff"}
+        }
+    };
+
+    Plotly.newPlot("plot", [...edgeTraces, nodeTrace], layout);
+</script>
+</body>
+</html>

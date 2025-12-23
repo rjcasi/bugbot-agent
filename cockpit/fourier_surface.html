@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fourier Surface Panel</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body { margin: 0; background: #050510; color: #e0e0ff; }
+        #plot { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+<div id="plot"></div>
+
+<script>
+    const x = [];
+    const y = [];
+    const size = 80;
+
+    for (let i = 0; i < size; i++) {
+        x.push(-2 * Math.PI + (4 * Math.PI * i / (size - 1)));
+        y.push(-2 * Math.PI + (4 * Math.PI * i / (size - 1)));
+    }
+
+    const z = [];
+    for (let i = 0; i < size; i++) {
+        const row = [];
+        for (let j = 0; j < size; j++) {
+            row.push(Math.sin(x[i]) * Math.cos(y[j]));
+        }
+        z.push(row);
+    }
+
+    const data = [{
+        z: z,
+        x: x,
+        y: y,
+        type: "surface",
+        colorscale: "Viridis",
+        showscale: true
+    }];
+
+    const layout = {
+        title: {
+            text: "Fourier Surface — z = sin(x)·cos(y)",
+            font: {color: "#e0e0ff"}
+        },
+        paper_bgcolor: "#050510",
+        scene: {
+            xaxis: {color: "#ccccff"},
+            yaxis: {color: "#ccccff"},
+            zaxis: {color: "#ccccff"},
+        },
+        margin: {l: 0, r: 0, t: 40, b: 0}
+    };
+
+    Plotly.newPlot("plot", data, layout);
+</script>
+</body>
+</html>

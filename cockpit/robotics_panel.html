@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Robotics Panel</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body { margin: 0; background: #050510; color: #e0e0ff; }
+        #plot { width: 100vw; height: 90vh; }
+        #controls { padding: 10px; background: #090922; color: #e0e0ff; }
+        input[type=range] { width: 200px; }
+    </style>
+</head>
+<body>
+
+<div id="plot"></div>
+
+<div id="controls">
+    <label>Joint 1 (θ1): <input id="theta1" type="range" min="-180" max="180" value="40"></label>
+    <span id="t1val">40°</span>
+    <br>
+    <label>Joint 2 (θ2): <input id="theta2" type="range" min="-180" max="180" value="30"></label>
+    <span id="t2val">30°</span>
+</div>
+
+<script>
+    function forwardKinematics(theta1, theta2, L1=1.0, L2=0.7) {
+        const t1 = theta1 * Math.PI / 180;
+        const t2 = theta2 * Math.PI / 180;
+
+        const x1 = L1 * Math.cos(t1);
+        const y1 = L1 * Math.sin(t1);
+
+        const x2 = x1 + L2 * Math.cos(t1 + t2);
+        const y2 = y1 + L2 * Math.sin(t1 + t2);
+
+        return [[0, x1, x2], [0, y1, y2]];
+    }
+
+    function updatePlot() {
+        const t1 = parseFloat(document.getElementById("theta1").value);
+        const t2 = parseFloat(document.getElementById("theta2").value);
+
+        document.getElementById("t1val").textContent = t1 + "°";
+        document.getElementById("t2val").textContent = t2 + "°";
+
+        const [xs, ys] = forwardKinematics(t1, t2);
+
+        const data = [{
+            x: xs,
+            y: ys,
+            mode: "lines+markers",
+            line: {color: "cyan", width: 5},
+            marker: {size: 12, color: ["white", "magenta", "red"]},
+        }];
+
+        const layout = {
+            paper_bgcolor: "#050510",
+            plot_bgcolor: "#050510",
+            xaxis: {range: [-2, 2], color: "#ccccff"},
+            yaxis: {range: [-2, 2], color: "#ccccff"},
+            margin: {l: 40, r: 20, t: 20, b: 40},
+            title: {text: "2‑Link Robotic Arm", font: {color: "#e0e0ff"}},
+        };
+
+        Plotly.newPlot("plot", data, layout);
+    }
+
+    document.getElementById("theta1").addEventListener("input", updatePlot);
+    document.getElementById("theta2").addEventListener("input", updatePlot);
+
+    updatePlot();
+</script>
+
+</body>
+</html>

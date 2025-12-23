@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Physics Arena</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background: #050510;
+            color: #e0e0ff;
+            display: grid;
+            grid-template-columns: 22% 56% 22%;
+            grid-template-rows: 65% 35%;
+            grid-template-areas:
+                "causal fourier embeddings"
+                "robotics robotics robotics";
+            height: 100vh;
+        }
+        #causal { grid-area: causal; border-right: 1px solid #222244; }
+        #fourier { grid-area: fourier; border-left: 1px solid #222244; border-right: 1px solid #222244; }
+        #embeddings { grid-area: embeddings; border-left: 1px solid #222244; }
+        #robotics { grid-area: robotics; border-top: 1px solid #222244; }
+        .panel { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+<div id="causal" class="panel"></div>
+<div id="fourier" class="panel"></div>
+<div id="embeddings" class="panel"></div>
+<div id="robotics" class="panel"></div>
+
+<script>
+/* -------------------------
+   CAUSAL SET (LEFT PANEL)
+------------------------- */
+(function() {
+    const nodes = [
+        {id: 1, x: 0, y: 3},
+        {id: 2, x: 2, y: 3},
+        {id: 3, x: -1, y: 2},
+        {id: 4, x: 1, y: 2},
+        {id: 5, x: 3, y: 2},
+        {id: 6, x: 0, y: 1},
+        {id: 7, x: 2, y: 1},
+        {id: 8, x: 1, y: 0}
+    ];
+
+    const edges = [
+        [1,3], [1,4],
+        [2,4], [2,5],
+        [3,6],
+        [4,6], [4,7],
+        [5,7],
+        [6,8],
+        [7,8]
+    ];
+
+    const edgeTraces = edges.map(([a,b]) => {
+        const A = nodes.find(n => n.id === a);
+        const B = nodes.find(n => n.id === b);
+        return {
+            x: [A.x, B.x],
+            y: [A.y, B.y],
+            mode: "lines",
+            line: {color: "#ffaa44", width: 2},
+            hoverinfo: "none",
+            showlegend: false
+        };
+    });
+
+    const nodeTrace = {
+        x: nodes.map(n => n.x),
+        y: nodes.map(n => n.y),
+        text: nodes.map(n => "E" + n.id),
+        mode: "markers+text",
+        textposition: "bottom center",
+        marker: {size: 16, color: "#66ccff"},
+        textfont: {color: "#ffffff"},
+        hoverinfo: "text"
+    };
+
+    Plotly.newPlot("causal", [...edgeTraces, nodeTrace], {
+        paper_bgcolor: "#050510",
+        plot_bgcolor: "#050510",
+        xaxis: {visible: false},
+        yaxis: {visible: false},
+        margin: {l: 0, r: 0, t: 30, b: 0},
+        title: {text: "Causal Set", font: {color: "#e0e0ff"}}
+    });
+})();
+    
+
+/* -------------------------
+   FOURIER SURFACE (CENTER)
+------------------------- */
+(function() {
+    const x = [];
+    const y = [];
+    const size = 60;
+
+    for (let i = 0; i < size; i++) {
+        x.push(-2 * Math.PI + (4 * Math.PI * i / (size - 1)));
+        y.push(-2 * Math.PI + (4 * Math.PI * i / (size - 1)));
+    }
+
+    const z = [];
+    for (let i = 0; i < size; i++) {
+        const row = [];
+        for (let j = 0; j < size; j++) {
+            row.push(Math.sin(x[i]) * Math.cos(y[j]));
+        }
+        z.push(row);
+    }
+
+    Plotly.newPlot("fourier", [{
+        z: z,
+        x: x,
+        y: y,
+        type: "surface",
+        colorscale: "Viridis",
+        showscale: false
+    }], {
+        paper_bgcolor: "#050510",
+        scene: {
+            xaxis: {color: "#ccccff"},
+            yaxis: {color: "#ccccff"},
+            zaxis: {color: "#ccccff"}
+        },
+        margin: {l: 0, r: 0, t: 30, b: 0},
+        title: {text: "Fourier Surface", font: {color: "#e0e0ff"}}
+    });
+})();
+
+
+/* -------------------------
+   EMBEDDINGS (RIGHT PANEL)
+------------------------- */
+(function() {
+    function generateClusters(numClusters = 3, pointsPerCluster = 40) {
+        const clusters = [];
+        const centers = [];
+
+        for (let i = 0; i < numClusters; i++) {
+            const cx = Math.random() * 8 - 4;
+            const cy = Math.random() * 8 - 4;
+            centers.push({x: cx, y: cy});
+
+            for (let j = 0; j < pointsPerCluster; j++) {
+                clusters.push({
+                    x: cx + (Math.random() - 0.5) * 1.2,
+                    y: cy + (Math.random() - 0.5) * 1.2,
+                    cluster: i
+                });
+            }
+        }
+        return {clusters, centers};
+    }
+
+    const {clusters, centers} = generateClusters();
+
+    const clusterTrace = {
+        x: clusters.map(p => p.x),
+        y: clusters.map(p => p.y),
+        mode: "markers",
+        marker: {
+            size: 7,
+            color: clusters.map(p => p.cluster),
+            colorscale: "Viridis"
+        }
+    };
+
+    const centerTrace = {
+        x: centers.map(c => c.x),
+        y: centers.map(c => c.y),
+        mode: "markers+text",
+        text: centers.map((c, i) => "C" + i),
+        textposition: "top center",
+        marker: {size: 14, color: "white", symbol: "x"}
+    };
+
+    Plotly.newPlot("embeddings", [clusterTrace, centerTrace], {
+        paper_bgcolor: "#050510",
+        plot_bgcolor: "#050510",
+        xaxis: {color: "#ccccff"},
+        yaxis: {color: "#ccccff"},
+        margin: {l: 30, r: 20, t: 30, b: 30},
+        title: {text: "Embedding Space", font: {color: "#e0e0ff"}}
+    });
+})();
+
+
+/* -------------------------
+   ROBOTICS (BOTTOM PANEL)
+------------------------- */
+(function() {
+    function forwardKinematics(theta1, theta2, L1=1.0, L2=0.7) {
+        const t1 = theta1 * Math.PI / 180;
+        const t2 = theta2 * Math.PI / 180;
+
+        const x1 = L1 * Math.cos(t1);
+        const y1 = L1 * Math.sin(t1);
+
+        const x2 = x1 + L2 * Math.cos(t1 + t2);
+        const y2 = y1 + L2 * Math.sin(t1 + t2);
+
+        return [[0, x1, x2], [0, y1, y2]];
+    }
+
+    const [xs, ys] = forwardKinematics(40, 30);
+
+    Plotly.newPlot("robotics", [{
+        x: xs,
+        y: ys,
+        mode: "lines+markers",
+        line: {color: "cyan", width: 5},
+        marker: {size: 12, color: ["white", "magenta", "red"]}
+    }], {
+        paper_bgcolor: "#050510",
+        plot_bgcolor: "#050510",
+        xaxis: {range: [-2, 2], color: "#ccccff"},
+        yaxis: {range: [-2, 2], color: "#ccccff"},
+        margin: {l: 40, r: 20, t: 20, b: 40},
+        title: {text: "Robotics Arm", font: {color: "#e0e0ff"}}
+    });
+})();
+</script>
+
+</body>
+</html>

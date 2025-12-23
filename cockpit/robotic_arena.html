@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robotics Arena</title>
+    <style>
+        body { font-family: sans-serif; }
+        #arena { width: 400px; height: 400px; background: #111; position: relative; }
+        #robot { width: 10px; height: 10px; background: red; position: absolute; }
+    </style>
+</head>
+<body>
+    <h1>Robotics Arena</h1>
+    <div id="arena">
+        <div id="robot"></div>
+    </div>
+
+    <script>
+        async function update() {
+            const res = await fetch("/robotics/step");
+            const data = await res.json();
+
+            const robot = document.getElementById("robot");
+            robot.style.left = (200 + data.x * 20) + "px";
+            robot.style.top = (200 + data.y * 20) + "px";
+            robot.style.transform = `rotate(${data.angle}rad)`;
+        }
+
+        setInterval(update, 100);
+    </script>
+</body>
+</html>
