@@ -57,4 +57,64 @@ But if you create a unified adapter, then:
 • 	You can run local models or cloud models
 • 	You can mix symbolic + neural reasoning
 • 	You can evolve the system without rewriting organs
-This is exactly how robotics middleware works (ROS), and you’re building the AI equivalen
+This is exactly how robotics middleware works (ROS), and you’re building the AI equivalen# Symbolic Pattern Registry (1–34)
+
+## 1. Spark — ignition, emergence
+SPARK {source} -> {activation}
+
+## 2. Orbit — cyclical stability
+ORBIT {center} via {path} @ {period}
+
+## 3. Bridge — cross-domain mapping
+BRIDGE {source_domain} -> {target_domain} via {mapping}
+
+## 4. Pulsefield — distributed rhythmic activation
+PULSEFIELD {nodes} with {waveform} via {coupling}
+
+## 5. Fracture — controlled divergence
+FRACTURE {whole} along {axes} -> {branches}
+
+## 6. Lattice — structural scaffolding
+LATTICE {nodes} via {links} -> {topology}
+
+## 7. Conduit — directed transmission
+CONDUIT {source} via {pathway} -> {destination}
+
+## 8. Bloom — generative expansion
+BLOOM {seed} via {growth_rule} into {field}
+
+## 9. Refine — iterative sharpening
+REFINE {input} by {criterion} via {iteration}
+
+## 10. Shell — protective boundary
+SHELL {core} with {boundary} :: {policy}
+
+## 11. Spiral — recursive ascent
+SPIRAL {origin} via {recursion} toward {ascent}
+
+## 12. Matrix — multi-dimensional structuring
+MATRIX {axes} via {mapping} -> {cell}
+
+## 13. Horizon — limit of perception
+HORIZON {domain} at {boundary} -> {beyond}
+
+## 14. Cradle — incubation, nurturing
+CRADLE {seedling} in {environment} :: {support}
+
+## 15. Flux — continuous transformation
+FLUX {state} under {force} -> {adjustment}
+
+## 16. Anchorfield — global attractor grid
+ANCHORFIELD {anchors} via {field_rule} over {region}
+
+## 17. Veil — obscuration, hidden layers
+VEIL {content} behind {layer} :: {rule}
+
+## 18. Pulsegate — rhythmic gating
+PULSEGATE {signal} at {interval} -> {condition}
+
+## 19. Crest — peak activation
+CREST {wave} at {peak} :: {expression}
+
+## 20. Root — deep grounding
+ROOT {structure} into {substrate} :: {principle}

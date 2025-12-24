@@ -91,3 +91,117 @@ cd bugbot-agent
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
+# Symbolic Pattern Language v1
+A unified symbolic grammar for describing perception, activation, structure, flow, recursion, protection, and evolution inside BugBot‑Agent.
+
+This language defines how the agent thinks, grows, stabilizes, protects itself, and transforms over time.  
+It is both **technical** and **symbolic**, bridging ML, cybernetics, physics, and philosophy.
+
+---
+
+## 🧠 Purpose
+The Symbolic Pattern Language provides:
+
+- A consistent grammar for agent behavior  
+- A shared vocabulary for cockpit panels  
+- A way to narrate internal processes  
+- A bridge between code, meaning, and structure  
+- A recruiter‑friendly conceptual layer  
+
+---
+
+## 🜂 Pattern List (1–34)
+
+### 1. Spark — ignition, emergence  
+`SPARK {source} -> {activation}`
+
+### 2. Orbit — cyclical stability  
+`ORBIT {center} via {path} @ {period}`
+
+### 3. Bridge — cross-domain mapping  
+`BRIDGE {source_domain} -> {target_domain} via {mapping}`
+
+### 4. Pulsefield — distributed rhythmic activation  
+`PULSEFIELD {nodes} with {waveform} via {coupling}`
+
+### 5. Fracture — controlled divergence  
+`FRACTURE {whole} along {axes} -> {branches}`
+
+### 6. Lattice — structural scaffolding  
+`LATTICE {nodes} via {links} -> {topology}`
+
+### 7. Conduit — directed transmission  
+`CONDUIT {source} via {pathway} -> {destination}`
+
+### 8. Bloom — generative expansion  
+`BLOOM {seed} via {growth_rule} into {field}`
+
+### 9. Refine — iterative sharpening  
+`REFINE {input} by {criterion} via {iteration}`
+
+### 10. Shell — protective boundary  
+`SHELL {core} with {boundary} :: {policy}`
+
+### 11. Spiral — recursive ascent  
+`SPIRAL {origin} via {recursion} toward {ascent}`
+
+### 12. Matrix — multi-dimensional structuring  
+`MATRIX {axes} via {mapping} -> {cell}`
+
+### 13. Horizon — limit of perception  
+`HORIZON {domain} at {boundary} -> {beyond}`
+
+### 14. Cradle — incubation, nurturing  
+`CRADLE {seedling} in {environment} :: {support}`
+
+### 15. Flux — continuous transformation  
+`FLUX {state} under {force} -> {adjustment}`
+
+### 16. Anchorfield — global attractor grid  
+`ANCHORFIELD {anchors} via {field_rule} over {region}`
+
+### 17. Veil — obscuration, hidden layers  
+`VEIL {content} behind {layer} :: {rule}`
+
+### 18. Pulsegate — rhythmic gating  
+`PULSEGATE {signal} at {interval} -> {condition}`
+
+### 19. Crest — peak activation  
+`CREST {wave} at {peak} :: {expression}`
+
+### 20. Root — deep grounding  
+`ROOT {structure} into {substrate} :: {principle}`
+
+---
+
+## 🧩 How BugBot‑Agent Uses This Language
+
+- **Cockpit Panels** use patterns to describe internal state  
+- **Organs** use patterns to declare behavior  
+- **Logs** use patterns to narrate transformations  
+- **Symbolic Physics Engine** uses patterns as primitives  
+- **Cyber Defense Arena** uses patterns to describe anomalies  
+- **Robotics Arena** uses patterns to describe motion and force  
+- **Memory Fabric** uses patterns to encode meaning  
+
+---
+
+## 🧬 Why Recruiters Love This
+This language shows:
+
+- Systems thinking  
+- Architecture clarity  
+- Symbolic reasoning  
+- Multi‑domain integration  
+- A unique, memorable conceptual layer  
+- A living agent with explainable behavior  
+
+It turns BugBot‑Agent into a **story**, not just a repo.
+
+---
+
+## 📦 Version
+**Symbolic Pattern Language v1**  
+Patterns 1–34  
+BugBot‑Agent Core Specification  
