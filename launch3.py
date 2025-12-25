@@ -1,31 +1,12 @@
 import subprocess
 import webbrowser
 import time
-from fastapi import FastAPI
-
-# -------------------------------
-# FASTAPI BACKEND APP
-# -------------------------------
-
-app = FastAPI()
-
-# Import your routers
-try:
-    from api.websocket_routes import router as ws_router
-    from api.http_routes import router as http_router
-
-    app.include_router(ws_router)
-    app.include_router(http_router)
-except Exception as e:
-    print("\n[WARNING] Could not import routers yet. Backend may still start.")
-    print("Error:", e)
-
-
-# -------------------------------
-# COCKPIT PANEL LAUNCHER
-# -------------------------------
 
 BASE_URL = "http://127.0.0.1:8000"
+
+def run_backend():
+    """Start the FastAPI backend using Uvicorn."""
+    return subprocess.Popen(["uvicorn", "launch:app", "--reload"])
 
 def open_panel(route: str):
     """Open a cockpit panel in the default web browser."""
@@ -33,11 +14,6 @@ def open_panel(route: str):
     print(f"\nOpening panel: {url}\n")
     time.sleep(0.3)
     webbrowser.open(url)
-
-
-# -------------------------------
-# TERMINAL COCKPIT MENU
-# -------------------------------
 
 def cockpit_menu():
     """Terminal-based cockpit menu."""
@@ -98,20 +74,6 @@ def cockpit_menu():
 
         else:
             print("\nInvalid choice. Try again.\n")
-
-
-# -------------------------------
-# BACKEND LAUNCHER
-# -------------------------------
-
-def run_backend():
-    """Start the FastAPI backend using Uvicorn."""
-    return subprocess.Popen(["uvicorn", "launch:app", "--reload"])
-
-
-# -------------------------------
-# MAIN ENTRYPOINT
-# -------------------------------
 
 if __name__ == "__main__":
     backend = run_backend()

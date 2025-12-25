@@ -1,0 +1,26 @@
+.anomaly-panel {
+  padding: 20px;
+  color: #e0e0e0;
+}
+
+.anomaly-card {
+  background: #111;
+  border: 1px solid #333;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.pattern-hit {
+  color: #50fa7b;
+  font-size: 1.2rem;
+}
+
+.explanation {
+  color: #ccc;
+  margin-top: 6px;
+}
+
+.no-match {
+  color: #888;
+}
