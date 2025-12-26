@@ -24,3 +24,19 @@
 .no-match {
   color: #888;
 }
+
+#pattern-tree-panel {
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    width: 360px;
+    background: #111;
+    color: #eee;
+    font-family: monospace;
+}
+
+.pattern-node {
+    margin-left: 20px;
+    padding: 4px;
+    border-left: 2px solid #888;
+}

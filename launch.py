@@ -35,6 +35,12 @@ def open_panel(route: str):
     webbrowser.open(url)
 
 
+def open_cockpit_home():
+    """Open the cockpit home page."""
+    print("\nOpening cockpit home...\n")
+    webbrowser.open(BASE_URL)
+
+
 # -------------------------------
 # TERMINAL COCKPIT MENU
 # -------------------------------
@@ -116,5 +122,6 @@ def run_backend():
 if __name__ == "__main__":
     backend = run_backend()
     time.sleep(1)  # give backend time to start
+    open_cockpit_home()  # <-- FIXED: open cockpit automatically
     cockpit_menu()
     backend.wait()

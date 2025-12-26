@@ -118,3 +118,65 @@ CREST {wave} at {peak} :: {expression}
 
 ## 20. Root — deep grounding
 ROOT {structure} into {substrate} :: {principle}
+
+bugbot-agent/
+│
+├── launch.py                     ← unified backend + cockpit launcher
+├── launcher2.py                  ← your old menu-only launcher (cleaned)
+│
+├── core/
+│   ├── telemetry/
+│   │     ├── emitter.py
+│   │     ├── symbolic_map.py
+│   │     ├── schema.py
+│   │     └── __init__.py
+│   │
+│   ├── memory/
+│   │     ├── fabric.py
+│   │     ├── serializer.py
+│   │     └── __init__.py
+│   │
+│   ├── patterns/
+│   │     ├── registry.py
+│   │     ├── serializer.py
+│   │     ├── schema.xml
+│   │     └── __init__.py
+│   │
+│   └── robotics/
+│         ├── arena.py
+│         ├── sensors.py
+│         ├── actuators.py
+│         └── __init__.py
+│
+├── api/
+│   ├── websocket_routes.py
+│   ├── http_routes.py
+│   └── __init__.py
+│
+├── cockpit/
+│   ├── index.html
+│   ├── style.css
+│   │
+│   ├── panels/
+│   │     ├── telemetry_panel.html
+│   │     ├── memory_panel.html
+│   │     ├── pattern_tree_panel.html
+│   │     ├── robotics_panel.html
+│   │     ├── physics_arena.html
+│   │     ├── causal_set.html
+│   │     ├── embeddings.html
+│   │     ├── fourier_surface.html
+│   │     └── cyber_arena.html
+│   │
+│   └── js/
+│         ├── telemetry.js
+│         ├── memory.js
+│         ├── pattern_tree.js
+│         ├── robotics.js
+│         ├── physics_arena.js
+│         ├── causal_set.js
+│         ├── embeddings.js
+│         └── fourier_surface.js
+│
+├── requirements.txt
+└── venv/                         ← your virtual environment (keep as-is)
