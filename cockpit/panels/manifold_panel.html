@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Manifold Panel</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="../js/manifold.js"></script>
+    <style>
+        body { margin: 0; background: #050510; color: #e0e0ff; }
+        #plot { width: 100vw; height: 90vh; }
+        #controls { padding: 10px; background: #090922; color: #e0e0ff; }
+        input[type=range] { width: 200px; }
+    </style>
+</head>
+<body>
+
+<div id="plot"></div>
+
+<div id="controls">
+    <label>Curvature (k): 
+        <input id="curvature" type="range" min="-2" max="2" step="0.01" value="0.2">
+    </label>
+    <span id="kval">0.2</span>
+    <br>
+
+    <label>Tangent Angle (θ): 
+        <input id="theta" type="range" min="0" max="360" value="45">
+    </label>
+    <span id="tval">45°</span>
+</div>
+
+</body>
+</html>

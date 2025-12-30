@@ -9,14 +9,55 @@
 <div id="sidebar">
     <h2>BugBot-Agent</h2>
     <ul>
-        <li onclick="loadPanel('/cyber')">Cyber Arena</li>
-        <li onclick="loadPanel('/heatmap')">Heatmap</li>
-        <li onclick="loadPanel('/raster')">Spike Raster</li>
-        <li onclick="loadPanel('/projector')">Embedding Projector</li>
-        <li onclick="loadPanel('/fuzz')">Fuzz Generator</li>
-        <li onclick="loadPanel('/tokens')">Token Visualizer</li>
-        <li onclick="loadPanel('/modelcard')">Model Card</li>
-        <li onclick="loadPanel('/robotics')">Robotics Arena</li>
+        <li onclick="loadPanel('/cyber_arena')">
+            Cyber Arena <span id="status-cyber_arena" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/heatmap')">
+            Heatmap Panel <span id="status-heatmap" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/raster')">
+            Spike Raster <span id="status-raster" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/embedding_projector')">
+            Embedding Projector <span id="status-embedding_projector" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/fuzz_generator')">
+            Fuzz Generator <span id="status-fuzz_generator" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/token_visualizer')">
+            Token Visualizer <span id="status-token_visualizer" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/model_card')">
+            Model Card Dashboard <span id="status-model_card" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/robotics')">
+            Robotics Arena <span id="status-robotics" class="status-dot status-loading"></span>
+        </li>
+
+        <hr>
+
+        <li onclick="loadPanel('/causal_set')">
+            Causal Set Panel <span id="status-causal_set" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/embeddings')">
+            Embedding Space Panel <span id="status-embeddings" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/fourier_surface')">
+            Fourier Surface Panel <span id="status-fourier_surface" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/robotics_panel')">
+            Robotics Panel (New) <span id="status-robotics_panel" class="status-dot status-loading"></span>
+        </li>
+        <li onclick="loadPanel('/physics_arena')">
+            Physics Arena <span id="status-physics_arena" class="status-dot status-loading"></span>
+        </li>
+
+        <hr>
+
+        <!-- NEW TELEMETRY PANEL -->
+        <li onclick="loadPanel('/telemetry_panel')">
+            Telemetry Panel <span id="status-telemetry_panel" class="status-dot status-loading"></span>
+        </li>
     </ul>
 </div>
 

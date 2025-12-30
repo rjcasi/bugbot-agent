@@ -1,22 +1,32 @@
+/* cockpit.css — modernized cockpit UI */
+
 body {
     margin: 0;
-    display: flex;
-    background: #111;
-    color: #eee;
+    padding: 0;
+    background: #0d0f12;
+    color: #e2e8f0;
     font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
+/* SIDEBAR */
 #sidebar {
-    width: 240px;
-    background: #1a1a1a;
+    width: 260px;
+    background: #111418;
+    border-right: 1px solid #1f242b;
     padding: 20px;
-    height: 100vh;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.4);
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 #sidebar h2 {
     margin-top: 0;
-    color: #4cc9f0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #7dd3fc;
+    text-shadow: 0 0 8px #0ea5e9;
 }
 
 #sidebar ul {
@@ -25,24 +35,42 @@ body {
 }
 
 #sidebar li {
-    padding: 10px;
-    margin: 6px 0;
-    background: #222;
-    cursor: pointer;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    background: #1a1e24;
     border-radius: 6px;
+    cursor: pointer;
     transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #sidebar li:hover {
-    background: #333;
+    background: #232830;
+    transform: translateX(4px);
 }
 
+/* STATUS DOTS */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.status-online { background: #22c55e; }
+.status-offline { background: #ef4444; }
+.status-loading { background: #eab308; }
+
+/* MAIN PANEL */
 #main {
-    flex-grow: 1;
-    height: 100vh;
+    flex: 1;
+    background: #0d0f12;
 }
 
-iframe {
+#panelFrame {
     width: 100%;
     height: 100%;
     border: none;

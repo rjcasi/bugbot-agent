@@ -1,6 +1,24 @@
 # 🐞 BugBot-Agent  
 ### A Modular AI Organism with Cyber, Vision, Embedding, and Symbolic Organs
 
+# 🧠 BugBot-Agent — A Symbolic AI Cockpit
+
+BugBot-Agent is a modular, living AI cockpit designed to dramatize cycles of perception, adaptation, defense, and renewal.  
+It integrates cyber panels, embedding spaces, robotics arenas, Fourier surfaces, and a unified physics organ — all orchestrated through FastAPI.
+
+This system is built for clarity, modularity, and recruiter-facing demonstration.
+
+---
+
+## 🚀 Launch Instructions
+
+Clone the repo and start the cockpit:
+
+```bash
+cd bugbot-agent
+source .venv/bin/activate
+python3 launch.py
+
 BugBot-Agent is a living, modular AI system designed to dramatize perception, adaptation, anomaly detection, and renewal.  
 It is built as a cockpit of interactive panels — each one representing an “organ” in the agent’s body.
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telemetry Panel</title>
+    <style>
+        body {
+            background: #0d0f12;
+            color: #e2e8f0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            color: #7dd3fc;
+            text-shadow: 0 0 8px #0ea5e9;
+        }
+        .metric {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        .value {
+            color: #a5f3fc;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Telemetry Stream</h2>
+
+<div class="metric">CPU Load: <span id="telemetry-cpu" class="value">--</span></div>
+<div class="metric">Spike Rate: <span id="telemetry-spikes" class="value">--</span></div>
+<div class="metric">Energy Level: <span id="telemetry-energy" class="value">--</span></div>
+
+</body>
+</html>

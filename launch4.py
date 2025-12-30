@@ -1,11 +1,7 @@
 import subprocess
 import webbrowser
 import time
-import platform
-import os
-import sys
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
 
 # -------------------------------
 # FASTAPI BACKEND APP
@@ -13,24 +9,7 @@ from fastapi.responses import FileResponse
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {
-        "status": "BugBot-Agent cockpit is alive",
-        "message": "Select a panel from the terminal menu.",
-        "panels": [
-            "Cyber Arena", "Heatmap Panel", "Raster Panel", "Fuzz Generator",
-            "Token Visualizer", "Model Card Dashboard", "Embedding Projector",
-            "Robotics Arena (old)", "Causal Set Panel", "Embedding Space Panel",
-            "Fourier Surface Panel", "Robotics Panel (new)", "Physics Arena"
-        ]
-    }
-
-@app.get("/telemetry_panel")
-def telemetry_panel():
-    return FileResponse("cockpit/telemetry_panel.html")
-
-# Optional router imports
+# Import your routers
 try:
     from api.websocket_routes import router as ws_router
     from api.http_routes import router as http_router
@@ -53,20 +32,13 @@ def open_panel(route: str):
     url = f"{BASE_URL}/{route}"
     print(f"\nOpening panel: {url}\n")
     time.sleep(0.3)
-
-    if platform.system() == "Linux":
-        print("WSL detected. Open the URL manually in your Windows browser.")
-    else:
-        webbrowser.open(url)
+    webbrowser.open(url)
 
 
 def open_cockpit_home():
     """Open the cockpit home page."""
     print("\nOpening cockpit home...\n")
-    if platform.system() == "Linux":
-        print("WSL detected. Open http://127.0.0.1:8000 manually.")
-    else:
-        webbrowser.open(BASE_URL)
+    webbrowser.open(BASE_URL)
 
 
 # -------------------------------
@@ -112,7 +84,7 @@ def cockpit_menu():
         elif choice == "7":
             open_panel("embedding_projector")
         elif choice == "8":
-            open_panel("robotics")
+            open_panel("robotics")  # old robotics arena
 
         # New organs
         elif choice == "14":
@@ -148,21 +120,8 @@ def run_backend():
 # -------------------------------
 
 if __name__ == "__main__":
-
-    # Prevent Uvicorn reload from re-running the launcher
-    if os.environ.get("RUN_MAIN") == "true":
-        cockpit_menu()
-        sys.exit()
-
-    print("\n=== BUGBOT-AGENT IGNITION SEQUENCE ===")
-    print("[OrganHub] Pattern Tree routing initialized.")
-    print("[CyberBridge] Online.")
-    print("[RoboticsMap] Awaiting telemetry.")
-    print("[PhysicsArena] Unified organ activated.")
-    print("[WSL Check] Browser auto-launch disabled on Linux.\n")
-
     backend = run_backend()
-    time.sleep(1)
-    open_cockpit_home()
+    time.sleep(1)  # give backend time to start
+    open_cockpit_home()  # <-- FIXED: open cockpit automatically
     cockpit_menu()
     backend.wait()
