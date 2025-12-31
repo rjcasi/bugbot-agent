@@ -1,0 +1,14 @@
+{
+  "points": ["a", "b", "c"],
+  "open_sets": [
+    ["a"], ["b"], ["c"], ["a","b","c"]
+  ],
+  "neighbors": {
+    "a": ["b"],
+    "b": ["a","c"],
+    "c": ["b"]
+  },
+  "is_product_space": false,
+  "is_quotient_space": false,
+  "locally_euclidean": false
+}

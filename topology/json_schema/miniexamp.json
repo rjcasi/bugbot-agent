@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "points": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "open_sets": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "neighbors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "metric": {
+      "type": "string",
+      "description": "Name of metric function registered in the agent"
+    },
+    "is_product_space": { "type": "boolean" },
+    "is_quotient_space": { "type": "boolean" },
+    "locally_euclidean": { "type": "boolean" }
+  },
+  "required": ["points", "open_sets"]
+}

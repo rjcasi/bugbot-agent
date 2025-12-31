@@ -1,0 +1,1 @@
+from .panels.registry import default_registry, OrganRegistry
