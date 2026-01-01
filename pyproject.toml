@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bugbot-agent"
+version = "0.1.0"
+description = "BugBot-Agent modular AI organism"
+authors = [
+    { name = "Renzo Casias" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+
+# Your actual package lives in src/
+[tool.setuptools.packages.find]
+where = ["src"]

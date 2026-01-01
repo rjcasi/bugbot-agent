@@ -35,3 +35,17 @@ class CyberFuzzEngine:
             "tokens": tokens,
             "response": "blocked" if anomaly else "clean",
         }
+
+
+# ---------------------------------------------------------
+# Standalone function expected by the cockpit + API routes
+# ---------------------------------------------------------
+
+def generate_fuzz_payloads(count: int = 10):
+    engine = CyberFuzzEngine()
+    payloads = []
+    for _ in range(count):
+        payloads.append({
+            "pattern": engine.generate()
+        })
+    return payloads
