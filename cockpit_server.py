@@ -2,9 +2,19 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
-import os
+
+from src.bugbot_agent.agent import Agent
+from src.bugbot_agent.organ_hub import OrganHub
+from src.bugbot_agent.organs.red_blue_cockpit.routes import router as rb_router, init_cockpit
 
 app = FastAPI()
+
+agent = Agent()
+organ_hub = OrganHub(agent)
+init_cockpit(agent)
+
+app.include_router(rb_router, prefix="/organ")
+
 
 # Mount cockpit folder for HTML panels
 app.mount("/cockpit", StaticFiles(directory="cockpit"), name="cockpit")

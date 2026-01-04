@@ -1,19 +1,21 @@
-"""
-Unified Organ Import Hub
-------------------------
-Centralized imports for all BugBotAgent organs.
-"""
+# src/bugbot_agent/organ_hub.py
 
-from symbolic_attention.tensor import SymbolicAttentionTensor
-from spiking_stdp.core import STDPSpikingLayer
-from cyber_arena.fuzz_engine import CyberFuzzEngine
-from robotics.telemetry import RoboticsEmbodiment
-from llm_adapter import create_llm_adapter
+from src.bugbot_agent.organs.red_blue_cockpit.controller import RedBlueCockpit
 
-__all__ = [
-    "SymbolicAttentionTensor",
-    "STDPSpikingLayer",
-    "CyberFuzzEngine",
-    "RoboticsEmbodiment",
-    "create_llm_adapter",
-]S
+class OrganHub:
+    """
+    Central registry for all organs attached to the BugBot-Agent.
+    """
+
+    def __init__(self, agent):
+        self.agent = agent
+        self.organs = {}
+
+        # Initialize organs here
+        self.register("red_blue_cockpit", RedBlueCockpit(agent))
+
+    def register(self, name, organ):
+        self.organs[name] = organ
+
+    def get(self, name):
+        return self.organs.get(name)
