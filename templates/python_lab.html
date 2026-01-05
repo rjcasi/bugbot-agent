@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Lab Cockpit</title>
+    <link rel="stylesheet" href="/static/cockpit.css">
+</head>
+<body>
+
+    <h1>Python Lab Cockpit</h1>
+    <p>Select a lab to run:</p>
+
+    <div id="lab-list"></div>
+
+    <pre id="output" style="
+        background:#111;
+        color:#0f0;
+        padding:1rem;
+        margin-top:1rem;
+        height:300px;
+        overflow:auto;
+        border:1px solid #333;
+    "></pre>
+
+    <script>
+        async function loadLabs() {
+            const res = await fetch("/pythonlab/labs");
+            const data = await res.json();
+
+            const container = document.getElementById("lab-list");
+            container.innerHTML = "";
+
+            data.labs.forEach(lab => {
+                const btn = document.createElement("button");
+                btn.innerText = lab;
+                btn.style.margin = "5px";
+                btn.onclick = () => runLab(lab);
+                container.appendChild(btn);
+            });
+        }
+
+        async function runLab(lab) {
+            const res = await fetch(`/pythonlab/run/${lab}`);
+            const data = await res.json();
+
+            const out = document.getElementById("output");
+            out.textContent =
+                `=== ${lab} ===\n\n` +
+                `STDOUT:\n${data.stdout || ""}\n\n` +
+                `STDERR:\n${data.stderr || ""}`;
+        }
+
+        loadLabs();
+    </script>
+
+</body>
+</html>

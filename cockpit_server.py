@@ -7,6 +7,7 @@ import uvicorn
 from src.bugbot_agent.agent import Agent
 from src.bugbot_agent.organ_hub import OrganHub
 from src.bugbot_agent.organs.red_blue_cockpit.routes import router as rbapp_router, init_cockpit
+from src.bugbot_agent.organs.python_lab.routes import router as pythonlab_router
 
 app = FastAPI()
 
@@ -34,6 +35,8 @@ init_cockpit(agent)
 #   RB-APP ORGAN ROUTES
 # -----------------------------
 app.include_router(rbapp_router, prefix="/rbapp")
+
+app.include_router(pythonlab_router, prefix="/pythonlab")
 
 # -----------------------------
 #   OLD STATIC PANELS (optional)
@@ -63,6 +66,10 @@ def robotics_panel():
 @app.get("/physics_arena")
 def physics_arena():
     return FileResponse("cockpit/physics_arena.html")
+
+@app.get("/python_lab")
+def python_lab(request: Request):
+    return templates.TemplateResponse("python_lab.html", {"request": request})
 
 # -----------------------------
 #   SERVER LAUNCHER
