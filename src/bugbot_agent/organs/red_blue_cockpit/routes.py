@@ -37,3 +37,7 @@ def defend_route(req: EventRequest):
 def explain_route(req: EventRequest):
     result = cockpit.explain(req.event)
     return {"result": result}
+
+@router.get("/ping")
+def ping():
+    return {"status": "RB-App organ online"}
