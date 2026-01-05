@@ -19,3 +19,31 @@ Use Python to parse log files and surface useful summaries and anomalies.
 
 ## Integration
 Later, this lab can connect to BugBot / Cybernaut logs and visualize in the cockpit.
+
+# Lab 03 — Log Analysis (Blue Team)
+
+## Goal
+Use Python to parse log files and extract meaningful defensive insights.
+
+## Skills
+- file reading
+- string parsing
+- counting and aggregation
+- anomaly detection
+
+## Tasks
+1. Load a sample log file.
+2. Count requests per IP address.
+3. Identify the top talkers.
+4. Detect unusual activity (e.g., too many requests).
+
+## Stretch
+- Export results to JSON.
+- Add regex-based parsing.
+- Add a simple anomaly threshold.
+
+## Integration
+This lab can later feed into:
+- a "Log Insights" panel in the Cybernaut cockpit
+- the Evolution Organ (agent learns from logs)
+- RB-App defensive scenarios

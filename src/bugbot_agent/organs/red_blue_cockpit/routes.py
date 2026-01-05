@@ -41,3 +41,8 @@ def explain_route(req: EventRequest):
 @router.get("/ping")
 def ping():
     return {"status": "RB-App organ online"}
+
+@router.post("/action")
+def action(payload: dict):
+    action = payload.get("action", "none")
+    return {"received": action, "status": "ok"}

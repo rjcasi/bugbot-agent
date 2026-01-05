@@ -2,12 +2,17 @@ LICENSE
 README.md
 pyproject.toml
 src/bugbot_agent/__init__.py
+src/bugbot_agent/agent.py
 src/bugbot_agent/organ_hub.py
 src/bugbot_agent.egg-info/PKG-INFO
 src/bugbot_agent.egg-info/SOURCES.txt
 src/bugbot_agent.egg-info/dependency_links.txt
 src/bugbot_agent.egg-info/top_level.txt
+src/bugbot_agent/organs/red_blue_cockpit/__init__.py
+src/bugbot_agent/organs/red_blue_cockpit/controller.py
+src/bugbot_agent/organs/red_blue_cockpit/routes.py
 src/cyber_arena/fuzz_engine.py
+src/cyber_arena/recon_engine.py
 src/llm_adapter/__init__.py
 src/llm_adapter/base.py
 src/llm_adapter/chatgpt_adapter.py
