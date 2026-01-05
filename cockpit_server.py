@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
+from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
@@ -8,6 +9,15 @@ from src.bugbot_agent.organ_hub import OrganHub
 from src.bugbot_agent.organs.red_blue_cockpit.routes import router as rb_router, init_cockpit
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def cockpit(request: Request):
+    return templates.TemplateResponse("cockpit.html", {"request": request})
+
+
 
 agent = Agent()
 organ_hub = OrganHub(agent)
